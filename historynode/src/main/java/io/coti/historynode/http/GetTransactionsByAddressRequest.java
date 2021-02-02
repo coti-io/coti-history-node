@@ -5,7 +5,7 @@ import io.coti.basenode.data.Hash;
 import io.coti.basenode.data.SignatureData;
 import io.coti.basenode.data.interfaces.ISignValidatable;
 import io.coti.basenode.data.interfaces.ISignable;
-import io.coti.basenode.http.Request;
+import io.coti.basenode.http.interfaces.IRequest;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
-public class GetTransactionsByAddressRequest extends Request implements ISignValidatable, ISignable {
+public class GetTransactionsByAddressRequest implements ISignValidatable, ISignable, IRequest {
 
     @NotEmpty
     private Hash address;
@@ -23,13 +23,18 @@ public class GetTransactionsByAddressRequest extends Request implements ISignVal
     @Valid
     private LocalDate endDate;
     @NotNull
-    public @Valid Hash userHash;
+    private @Valid Hash userHash;
     @NotNull
-    public @Valid SignatureData userSignature;
+    private @Valid SignatureData userSignature;
 
     @Override
     public SignatureData getSignature() {
         return userSignature;
+    }
+
+    @Override
+    public void setSignature(SignatureData signature) {
+        this.userSignature = signature;
     }
 
     @Override
@@ -40,11 +45,6 @@ public class GetTransactionsByAddressRequest extends Request implements ISignVal
     @Override
     public void setSignerHash(Hash signerHash) {
         this.userHash = signerHash;
-    }
-
-    @Override
-    public void setSignature(SignatureData signature) {
-        this.userSignature = signature;
     }
 }
 

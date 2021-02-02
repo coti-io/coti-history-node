@@ -20,7 +20,7 @@ public class ChunkService extends BaseNodeChunkService {
 
     private static final int MAXIMUM_BUFFER_SIZE = 50000;
 
-    public void transactionHandler(Consumer<ResponseExtractor> extractorConsumer, PrintWriter output) {
+    public void transactionHandler(Consumer<ResponseExtractor<Void>> extractorConsumer, PrintWriter output) {
         try {
             AtomicBoolean firstTransactionArrived = new AtomicBoolean(false);
 
@@ -30,7 +30,7 @@ public class ChunkService extends BaseNodeChunkService {
                     TransactionData transactionData = getHashToTransactionData.getData();
                     if (transactionData != null) {
                         if (transactionData.getHash().equals(getHashToTransactionData.getHash())) {
-                            if (firstTransactionArrived.get() == true) {
+                            if (firstTransactionArrived.get()) {
                                 sendChunk(",", output);
                             } else {
                                 firstTransactionArrived.set(true);
